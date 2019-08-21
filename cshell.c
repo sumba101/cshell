@@ -4,17 +4,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
-/* List of all things to implement
- * Display requirement
- * cd
- * pwd
- * echo
- * background processes
- * vi
- * emacs and more
- * pinfo
- * clear
- * */
 
 // Defining colors for usage later
 #define KNRM  "\x1B[0m"
@@ -25,10 +14,12 @@
 #define KMAG  "\x1B[35m"
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
-
+//defining a default buffer for inputs
 #define BUFSIZE 10000
-
+//defining a maximum number of arguments
 #define ARGMAX 10
+
+//a greeting string which is constant
 const char greeting[BUFSIZE]= "\t\t\t\t          __\n"
                              "\t\t  ___  \t             ____/ /_    _____  __      __   \n"
                              "\t\t / __\\    ____      / __/  _ \\  /      / /     / /          \n"
@@ -36,102 +27,138 @@ const char greeting[BUFSIZE]= "\t\t\t\t          __\n"
                              "\t\t\\____/\t          /___//_/ // /_____ /_____/ /_____/ \t\t\t\t\t  \t\t                                                         \n....by Sumanth Balaji!\n\n";
 
 
+//an exiting line
+const char ending[BUFSIZE]="Exiting the C shell, Thank You.";
+
+bool exiter(size_t argc, char **argv);
+
+bool cd(size_t argc, char **argv);
+
+bool clear(size_t argc, char **argv);
+
+bool pwd(size_t argc, char **argv);
+bool echo(size_t argc, char **argv);
+bool ls(size_t argc,char **argv);
+
+const char * builtin_C[]={"exit","cd","clear","pwd","echo","ls"};
+
+const bool (*builtin_F[])(size_t ,char **)={&exiter,&cd,&clear,&pwd,&echo,&ls};//ls is left
+//setup for function call back mechanism
 
 void cwd(char* cwdstr, int command);
-
+//helper function
 void UsernHost_names(char usernhoststring[]);
-
+//helper function
 void adjust_start(char temp[10000]);
+//helper function
+
+void bubbleout(char *string);
+//helper function
 
 void prompt(char cwdstr[],char usernhoststring[]);
 
 size_t input(size_t argc, char **argv, bool *background);
+//input accepting and processing
+
+bool execution(size_t argc, char **argv, bool background);
+//execution module that directs the action
+
+void freeing(char **pString,int count);
 
 int main()
 {
     printf("%s%s",KBLU,greeting);
 
     char cwdstr[BUFSIZE],usernhoststring[2*BUFSIZE];
-
     bool exit=false;
 
     while(!exit){
-
         prompt(cwdstr,usernhoststring);
-
-        char command[BUFSIZE];
         size_t argc=0;
-        char ** argv;
+        char **argv = malloc(sizeof(char)*ARGMAX);
         bool background=false;
 
         argc=input(argc,argv,&background);
 
-        if(!strcmp(command,"clear")){
-            printf ("\033c");
-        }
-        else if(!strcmp(command,"pwd")){
-            cwd(cwdstr,1); //parameter 1 makes it print out cwd
-        }
-        else if(command[0]=='c'&&command[1]=='d'){ //if the command is cd
-            /*
-             * must handle
-             * cd . or ./
-             * cd ../ or .. or ../../ and more
-             * cd ~
-             * cd ~/blah/blah
-             * cd ./blah/blah
-             * */
-            cd();
-        }
-        else if(!strcmp(command,"echo")){
+        char *temp=malloc(BUFSIZE);
 
-        }
-        else if(!strcmp(command,"cd")){
+        exit=execution(argc,argv,background);
 
-        }
-        else if(!strcmp(command,"cd")){
+        //exit takes value true in case of errors and whatnot
+        free(argv[0]);
+        free(argv); //frees up argv
+    }
 
-        }
-        else if(!strcmp(command,"cd")){
+    printf("%s%s",KBLU,ending);
+    return 0;
+}
+
+
+bool execution(size_t argc, char **argv, bool background) {
+
+    if (argv[0]==NULL){
+        return false;
+    }//base case
+
+    bool redirect_in,redirect_out;
+
+    //loop through to check for redirects and piping, i.e > < >> and |
+    //This is to be handled in later stage
+    for (int i = 0; argv[i] ; ++i) {
+        if (!strcmp(argv[i],">")){
+
+        } //redirect out
+        else if (!strcmp(argv[i],">>")){
+
+        } //redirect out
+        else if (!strcmp(argv[i],"|")){
+
+        } //redirect in
+        else if (!strcmp(argv[i],"<")){
+
+        } //redirect in
+    }
+
+    for (int j = 0;builtin_C[j]; ++j) {
+
+        if (!strcmp(argv[0],builtin_C[j])){
+
+            return (builtin_F[j])(argc,argv);
 
         }
     }
-    return 0;
+
+    return false; //default return
+
 }
 
 size_t input(size_t argc, char **argv, bool *background) {
     fflush(stdout); // clear out the stdout buffer just in case
 
-    char *command= NULL;
+    char *command= malloc(sizeof(char)*BUFSIZE);
     size_t buf = 0;
     getline(&command, &buf, stdin);
-    //getline automatically allocates a buffer of appropriate size
+//    getline automatically allocates a buffer of appropriate size
 
-    //input1 = (char *)malloc(strlen(command) * sizeof(char));
-    //strncpy(input1,input,strlen(command));
     argc = 0;
     *background = false;
-    while((argv[argc] = strtok(command, " \t\n")) != NULL && argc < ARGMAX-1)
+    char * arg=strtok(command," \t\n");
+    while(arg != NULL && argc < ARGMAX-1)
     {
+        argv[argc]=arg;
         if(strcmp(argv[argc],"&")==0)
         {
             *background = true; //run in inBackground
         }
+
         ++argc;
-        strcpy(command,NULL); //because in repeat strtoks, null must be passed
+        arg=strtok(NULL," \t\n"); //because in repeat strtoks, null must be passed
     }
-    free(command);
+    argv[argc]=NULL;
+
     return argc;
+    //the data pointed to by command is pointed to by argv now, hence it must be deleted later
 }
-
-void prompt(char cwdstr[],char usernhoststring[]) {
-    cwd(cwdstr,0);
-    UsernHost_names(usernhoststring);
-
-    printf("<%s%s:%s>",KRED,usernhoststring,cwdstr);
-
-}
-
 
 void UsernHost_names(char usernhoststring[]){
     char *lgn,host[BUFSIZE];
@@ -145,7 +172,6 @@ void UsernHost_names(char usernhoststring[]){
     }
 }
 
-
 void cwd(char* cwdstr,int command)
 {
     char temp[BUFSIZE];
@@ -153,6 +179,7 @@ void cwd(char* cwdstr,int command)
     if(getcwd(temp, sizeof(temp)) != NULL)
     {
         adjust_start(temp);
+
         strcpy(cwdstr,temp);
         if(command==1)  // check if pwd is to be printed
         {
@@ -160,6 +187,13 @@ void cwd(char* cwdstr,int command)
         }
     }
     else perror("+--- Error in getcwd() : ");
+}
+
+void prompt(char cwdstr[],char usernhoststring[]) {
+    cwd(cwdstr,0);
+    UsernHost_names(usernhoststring);
+
+    printf("%s<%s:%s>",KRED,usernhoststring,cwdstr);
 
 }
 
@@ -168,9 +202,8 @@ void adjust_start(char temp[]) {
     strcpy(new_home,"/home/sumanth/OS/2018114002_CShell");
     int i = 0;
     for (; new_home[i] && new_home[i]==temp[i] ; ++i) {}
-    if (i>strlen(temp)){
-        perror("Error, current location is outside of shell");
-    } else{
+    if (i<=strlen(temp))
+    {
         char replace[10000];
         strcpy(replace,"~");
         int z=1;
@@ -181,5 +214,80 @@ void adjust_start(char temp[]) {
         }
         replace[z]='\0';
         strcpy(temp,replace);
-    }
+    }    //else the path is outside of shell, hence no edits
+
 }
+
+void bubbleout(char string[]) {
+    int j = 0;
+    for (; string[j+1] ; ++j) {
+        string[j]^=string[j+1];
+        string[j+1]^=string[j];
+        string[j]^=string[j+1];
+        printf("%s\n",string);
+    }
+    string[j]^=string[j+1];
+    string[j+1]^=string[j];
+    string[j]^=string[j+1];
+
+
+    //this code bubbles out the first character
+}
+
+bool cd(size_t argc, char **argv) {
+    //returns true in case of failure after warning
+    if(argc!=2){
+        printf("%sError, command is incorrect",KRED);
+    }
+    if(argv[1][0]=='~'){
+        char new_home[10000];
+        strcpy(new_home,"/home/sumanth/OS/2018114002_CShell");
+        bubbleout(argv[1]);
+        strcat(new_home,argv[1]);
+        strcpy(argv[1],new_home);
+    }//changing the meaning of ~
+
+    if(argv[1][0]=='-'){// To be handled later
+        ;
+    }
+    if (chdir(argv[1])){//if unsuccessful, goes into the condition
+        printf("%sError, directory %s is not found",KRED,argv[1]);
+    }
+    pwd(argc,argv);
+    return false;
+}
+
+bool exiter(size_t argc, char **argv) {
+
+    return true;
+}
+
+bool clear(size_t argc, char **argv) {
+    printf ("\033c");
+    return false;
+}
+
+bool pwd(size_t argc, char **argv) {
+    char *temp = NULL;
+    temp=malloc(sizeof(char)*BUFSIZE);
+    cwd(temp,1);
+
+    free(temp);
+    return false;
+}
+
+bool echo(size_t argc, char **argv) {
+    //as of now prints whatever it is told
+    for (int i = 1; argv[i]; ++i) {
+        printf("%s%s",KRED,argv[i]);
+    }
+    printf("\n");
+    return false;
+}
+
+bool ls(size_t argc, char **argv) {
+    
+    return false; }
+
+
+//builtin commands
