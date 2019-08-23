@@ -13,10 +13,22 @@ zconf.h
 -
 string.h
 -
-malloc.h
--
 stdlib.h
 -
 stdbool.h
+-
+dirent.h
+-
+sys/stat.h
+-
+pwd.h
+-
+grp.h
+-
+time.h
+-
+wait.h
+-
+fcntl.h
 -
 
