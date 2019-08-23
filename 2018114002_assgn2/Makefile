@@ -1,0 +1,2 @@
+cshell:
+	gcc cshell.c

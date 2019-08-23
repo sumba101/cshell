@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/sumanth/OS/2018114002_CShell/cd.h
+
+/home/sumanth/OS/2018114002_CShell/clear.h
+
 /home/sumanth/OS/2018114002_CShell/cshell.c
 stdio.h
 -
@@ -31,4 +35,38 @@ wait.h
 -
 fcntl.h
 -
+prototypes.h
+/home/sumanth/OS/2018114002_CShell/prototypes.h
+cd.h
+/home/sumanth/OS/2018114002_CShell/cd.h
+clear.h
+/home/sumanth/OS/2018114002_CShell/clear.h
+echo.h
+/home/sumanth/OS/2018114002_CShell/echo.h
+exiter.h
+/home/sumanth/OS/2018114002_CShell/exiter.h
+helper_func.h
+/home/sumanth/OS/2018114002_CShell/helper_func.h
+ls.h
+/home/sumanth/OS/2018114002_CShell/ls.h
+pinfo.h
+/home/sumanth/OS/2018114002_CShell/pinfo.h
+pwd.h
+/home/sumanth/OS/2018114002_CShell/pwd.h
+history.h
+/home/sumanth/OS/2018114002_CShell/history.h
+
+/home/sumanth/OS/2018114002_CShell/echo.h
+
+/home/sumanth/OS/2018114002_CShell/exiter.h
+
+/home/sumanth/OS/2018114002_CShell/helper_func.h
+
+/home/sumanth/OS/2018114002_CShell/history.h
+
+/home/sumanth/OS/2018114002_CShell/ls.h
+
+/home/sumanth/OS/2018114002_CShell/pinfo.h
+
+/home/sumanth/OS/2018114002_CShell/prototypes.h
 

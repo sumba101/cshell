@@ -1,0 +1,1 @@
+gcc cd.h clear.h cshell.c echo.h exiter.h helper_func.h history.h ls.h pinfo.h prototypes.h pwd.h
