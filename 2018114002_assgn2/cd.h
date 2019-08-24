@@ -4,8 +4,6 @@ bool cd(const size_t argc,char **argv){
         printf("%sError, command is incorrect",KRED);
     }
     if(argv[1][0]=='~'){
-        char new_home[10000];
-        strcpy(new_home,"/home/sumanth/OS/2018114002_CShell");
         bubbleout(argv[1]);
         strcat(new_home,argv[1]);
         strcpy(argv[1],new_home);

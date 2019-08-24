@@ -23,7 +23,7 @@
 
 char history[20][BUFSIZE];
 int hist_counter=0;
-
+char new_home[1000];
 
 ////modules for the commands
 #include "prototypes.h"
@@ -73,6 +73,7 @@ const bool (*builtin_F[])(const size_t ,char **)={
 
 int main(){//semincolon separated commands in the command line due to assignment requirement
     printf("%s%s",KBLU,greeting);
+    getcwd(new_home, sizeof(new_home));
 
     char cwdstr[BUFSIZE],usernhoststring[2*BUFSIZE];
     bool exit=false;
@@ -149,12 +150,22 @@ void child_end(int sig) {
     int status;
     pid = waitpid(-1, &status, WNOHANG); //wait till child process is over
     int i=0;
-    while (v[i].pid!=pid&&i<100){
-        ++i;
+    bool found_pid=false;
+
+    while (i<100 && !found_pid){
+       if (v[i].full &&v[i].pid==pid)///if pid exists and if full
+       {
+           found_pid=true;
+           break;
+       }
+       ++i;
     }//finds the position that has the name of the command
-    char buffer[BUFSIZE];
-    sprintf(buffer,"\n%s with pid %d exited normally\n",v[i].command,pid);
-    write(1, buffer, strlen(buffer));
+    if (found_pid){
+        char buffer[BUFSIZE];
+        sprintf(buffer,"\n%s with pid %d exited normally\n",v[i].command,pid);
+        v[i].full=false;
+        write(1, buffer, strlen(buffer));
+    }
 
 }
 
@@ -203,6 +214,7 @@ bool execution(size_t argc, char **argv, bool background) {
         if (!background){ ///if it is not a background process, its run and finished
             waitpid(pid,NULL,0);
         } else{
+
             for (int i = 0; i < 100 ; ++i) {
                 if(!v[i].full){
                     v[i].full=true;

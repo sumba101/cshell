@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/sumanth/OS/2018114002_CShell/cd.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cd.h
 
-/home/sumanth/OS/2018114002_CShell/clear.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/clear.h
 
-/home/sumanth/OS/2018114002_CShell/cshell.c
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c
 stdio.h
 -
 zconf.h
@@ -36,37 +36,37 @@ wait.h
 fcntl.h
 -
 prototypes.h
-/home/sumanth/OS/2018114002_CShell/prototypes.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/prototypes.h
 cd.h
-/home/sumanth/OS/2018114002_CShell/cd.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cd.h
 clear.h
-/home/sumanth/OS/2018114002_CShell/clear.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/clear.h
 echo.h
-/home/sumanth/OS/2018114002_CShell/echo.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/echo.h
 exiter.h
-/home/sumanth/OS/2018114002_CShell/exiter.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/exiter.h
 helper_func.h
-/home/sumanth/OS/2018114002_CShell/helper_func.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/helper_func.h
 ls.h
-/home/sumanth/OS/2018114002_CShell/ls.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/ls.h
 pinfo.h
-/home/sumanth/OS/2018114002_CShell/pinfo.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pinfo.h
 pwd.h
-/home/sumanth/OS/2018114002_CShell/pwd.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pwd.h
 history.h
-/home/sumanth/OS/2018114002_CShell/history.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/history.h
 
-/home/sumanth/OS/2018114002_CShell/echo.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/echo.h
 
-/home/sumanth/OS/2018114002_CShell/exiter.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/exiter.h
 
-/home/sumanth/OS/2018114002_CShell/helper_func.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/helper_func.h
 
-/home/sumanth/OS/2018114002_CShell/history.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/history.h
 
-/home/sumanth/OS/2018114002_CShell/ls.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/ls.h
 
-/home/sumanth/OS/2018114002_CShell/pinfo.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pinfo.h
 
-/home/sumanth/OS/2018114002_CShell/prototypes.h
+/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/prototypes.h
 

@@ -123,32 +123,32 @@ depend:
 	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/build
 .PHONY : 2018114002_CShell/fast
 
-cshell.o: cshell.c.o
+2018114002_assgn2/cshell.o: 2018114002_assgn2/cshell.c.o
 
-.PHONY : cshell.o
+.PHONY : 2018114002_assgn2/cshell.o
 
 # target to build an object file
-cshell.c.o:
-	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/cshell.c.o
-.PHONY : cshell.c.o
+2018114002_assgn2/cshell.c.o:
+	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o
+.PHONY : 2018114002_assgn2/cshell.c.o
 
-cshell.i: cshell.c.i
+2018114002_assgn2/cshell.i: 2018114002_assgn2/cshell.c.i
 
-.PHONY : cshell.i
+.PHONY : 2018114002_assgn2/cshell.i
 
 # target to preprocess a source file
-cshell.c.i:
-	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/cshell.c.i
-.PHONY : cshell.c.i
+2018114002_assgn2/cshell.c.i:
+	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.i
+.PHONY : 2018114002_assgn2/cshell.c.i
 
-cshell.s: cshell.c.s
+2018114002_assgn2/cshell.s: 2018114002_assgn2/cshell.c.s
 
-.PHONY : cshell.s
+.PHONY : 2018114002_assgn2/cshell.s
 
 # target to generate assembly for a file
-cshell.c.s:
-	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/cshell.c.s
-.PHONY : cshell.c.s
+2018114002_assgn2/cshell.c.s:
+	$(MAKE) -f CMakeFiles/2018114002_CShell.dir/build.make CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.s
+.PHONY : 2018114002_assgn2/cshell.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... 2018114002_CShell"
 	@echo "... edit_cache"
-	@echo "... cshell.o"
-	@echo "... cshell.i"
-	@echo "... cshell.s"
+	@echo "... 2018114002_assgn2/cshell.o"
+	@echo "... 2018114002_assgn2/cshell.i"
+	@echo "... 2018114002_assgn2/cshell.s"
 .PHONY : help
 
 

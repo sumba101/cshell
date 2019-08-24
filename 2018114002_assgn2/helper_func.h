@@ -37,8 +37,6 @@ void prompt(char cwdstr[],char usernhoststring[]) {
 }
 
 void adjust_start(char temp[]) {
-    char new_home[10000];
-    strcpy(new_home,"/home/sumanth/OS/2018114002_CShell");
     if(strlen(temp)>=strlen(new_home)){
         int i = 0;
         for (; new_home[i] && new_home[i]==temp[i] ; ++i) {}

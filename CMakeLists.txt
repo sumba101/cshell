@@ -3,4 +3,4 @@ project(2018114002_CShell)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(2018114002_CShell cshell.c)
+add_executable(2018114002_CShell ../2018114002_assgn2/cshell.c)

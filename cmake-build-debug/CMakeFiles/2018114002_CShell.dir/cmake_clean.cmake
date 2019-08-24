@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/2018114002_CShell.dir/cshell.c.o"
+  "CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o"
   "2018114002_CShell.pdb"
   "2018114002_CShell"
 )

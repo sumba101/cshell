@@ -57,27 +57,27 @@ include CMakeFiles/2018114002_CShell.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/2018114002_CShell.dir/flags.make
 
-CMakeFiles/2018114002_CShell.dir/cshell.c.o: CMakeFiles/2018114002_CShell.dir/flags.make
-CMakeFiles/2018114002_CShell.dir/cshell.c.o: ../cshell.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/2018114002_CShell.dir/cshell.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/2018114002_CShell.dir/cshell.c.o   -c /home/sumanth/OS/2018114002_CShell/cshell.c
+CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o: CMakeFiles/2018114002_CShell.dir/flags.make
+CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o: ../2018114002_assgn2/cshell.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o   -c /home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c
 
-CMakeFiles/2018114002_CShell.dir/cshell.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/2018114002_CShell.dir/cshell.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sumanth/OS/2018114002_CShell/cshell.c > CMakeFiles/2018114002_CShell.dir/cshell.c.i
+CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c > CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.i
 
-CMakeFiles/2018114002_CShell.dir/cshell.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/2018114002_CShell.dir/cshell.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sumanth/OS/2018114002_CShell/cshell.c -o CMakeFiles/2018114002_CShell.dir/cshell.c.s
+CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c -o CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.s
 
 # Object files for target 2018114002_CShell
 2018114002_CShell_OBJECTS = \
-"CMakeFiles/2018114002_CShell.dir/cshell.c.o"
+"CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o"
 
 # External object files for target 2018114002_CShell
 2018114002_CShell_EXTERNAL_OBJECTS =
 
-2018114002_CShell: CMakeFiles/2018114002_CShell.dir/cshell.c.o
+2018114002_CShell: CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o
 2018114002_CShell: CMakeFiles/2018114002_CShell.dir/build.make
 2018114002_CShell: CMakeFiles/2018114002_CShell.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable 2018114002_CShell"

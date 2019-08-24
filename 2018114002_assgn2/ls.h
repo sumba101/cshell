@@ -36,11 +36,11 @@ bool ls(const size_t argc,char **argv){
     ///changing into the directory before doing ls. changing out of it is done in the end
 
     if(filepath[0]=='~'){
-        char new_home[10000];
-        strcpy(new_home,"/home/sumanth/OS/2018114002_CShell");
+        char new_homeC[10000];
+        strcpy(new_homeC,new_home);
         bubbleout(filepath);
-        strcat(new_home,filepath);
-        strcpy(filepath,new_home);
+        strcat(new_homeC,filepath);
+        strcpy(filepath,new_homeC);
     }//changing the meaning of ~
 
     if (chdir(filepath)){//if unsuccessful, goes into the condition

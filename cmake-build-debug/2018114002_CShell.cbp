@@ -84,7 +84,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/sumanth/OS/2018114002_CShell/cshell.c">
+		<Unit filename="/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c">
 			<Option target="2018114002_CShell"/>
 		</Unit>
 		<Unit filename="/home/sumanth/OS/2018114002_CShell/CMakeLists.txt">
