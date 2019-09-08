@@ -22,8 +22,8 @@ void prompt(char cwdstr[],char usernhoststring[]);
 bool execution(size_t argc, char **argv, bool background);
 //execution module that directs the action
 
-void add_history(char *command);
+void add_Chistory(char *command);
 
-void input1(char **pString);
+void input1(char **pString,char cwdstr[],char usernhoststring[]);
 
 size_t input2(size_t argc, char **argv, bool *background, char *command);

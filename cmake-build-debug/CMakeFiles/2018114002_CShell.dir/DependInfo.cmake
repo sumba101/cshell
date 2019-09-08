@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c" "/home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o"
+  "/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/cshell.c" "/home/spawnfire/OS/cShell/cshell/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

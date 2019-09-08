@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cd.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/cd.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/clear.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/clear.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cshell.c
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/cshell.c
 stdio.h
 -
 zconf.h
@@ -35,38 +35,46 @@ wait.h
 -
 fcntl.h
 -
+readline/readline.h
+-
+readline/history.h
+-
 prototypes.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/prototypes.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/prototypes.h
+jobs.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/jobs.h
 cd.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/cd.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/cd.h
 clear.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/clear.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/clear.h
 echo.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/echo.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/echo.h
 exiter.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/exiter.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/exiter.h
 helper_func.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/helper_func.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/helper_func.h
 ls.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/ls.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/ls.h
 pinfo.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pinfo.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/pinfo.h
 pwd.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pwd.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/pwd.h
 history.h
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/history.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/history.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/echo.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/echo.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/exiter.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/exiter.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/helper_func.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/helper_func.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/history.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/history.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/ls.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/jobs.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/pinfo.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/ls.h
 
-/home/sumanth/OS/2018114002_CShell/2018114002_assgn2/prototypes.h
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/pinfo.h
+
+/home/spawnfire/OS/cShell/cshell/2018114002_assgn2/prototypes.h
 

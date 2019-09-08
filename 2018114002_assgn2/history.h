@@ -10,7 +10,7 @@ bool historyp(const size_t argc,char **argv){
     }
     return false;
 }
-void add_history(char *command) {
+void add_Chistory(char *command) {
     int pos=hist_counter%20;
 
     strcpy(history[pos],command);

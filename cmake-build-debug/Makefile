@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/sumanth/Clion/CLion-2018.3.4/clion-2018.3.4/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/spawnfire/clion-2019.2.1/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/sumanth/Clion/CLion-2018.3.4/clion-2018.3.4/bin/cmake/linux/bin/cmake -E remove -f
+RM = /home/spawnfire/clion-2019.2.1/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sumanth/OS/2018114002_CShell
+CMAKE_SOURCE_DIR = /home/spawnfire/OS/cShell/cshell
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sumanth/OS/2018114002_CShell/cmake-build-debug
+CMAKE_BINARY_DIR = /home/spawnfire/OS/cShell/cshell/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/sumanth/OS/2018114002_CShell/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/sumanth/Clion/CLion-2018.3.4/clion-2018.3.4/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/spawnfire/clion-2019.2.1/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/sumanth/Clion/CLion-2018.3.4/clion-2018.3.4/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/spawnfire/clion-2019.2.1/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles /home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/spawnfire/OS/cShell/cshell/cmake-build-debug/CMakeFiles /home/spawnfire/OS/cShell/cshell/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sumanth/OS/2018114002_CShell/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/spawnfire/OS/cShell/cshell/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
