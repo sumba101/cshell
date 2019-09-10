@@ -19,11 +19,11 @@ void bubbleout(char *string);
 
 void prompt(char cwdstr[],char usernhoststring[]);
 
-bool execution(size_t argc, char **argv, bool background);
+bool execution(size_t argc, char **argv);
 //execution module that directs the action
 
 void add_Chistory(char *command);
 
 void input1(char **pString,char cwdstr[],char usernhoststring[]);
 
-size_t input2(size_t argc, char **argv, bool *background, char *command);
+size_t input2(size_t argc, char **argv, char *command);

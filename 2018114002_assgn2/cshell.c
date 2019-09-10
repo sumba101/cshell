@@ -112,9 +112,8 @@ int main(){    //semincolon separated commands in the command line due to assign
         for (int i = 0; commands[i] && !exit; ++i) {
             size_t argp=0;
             char **argv_p = malloc(sizeof(char)*BUFSIZE);
-            bool background=false;
-            argp=input2(argp,argv_p,&background,commands[i]);
-            exit=execution(argp,argv_p,background);
+            argp=input2(argp,argv_p,commands[i]);
+            exit=execution(argp,argv_p);
 
             //exit takes value true in case of errors and whatnot
         }
@@ -127,24 +126,17 @@ int main(){    //semincolon separated commands in the command line due to assign
 }
 
 
-size_t input2(size_t argc, char **argv, bool *background, char *command) {
+size_t input2(size_t argc, char **argv, char *command) {
 
     if (strcmp(command,"\n") != 0)
         add_Chistory(command);
 
     argc = 0;
-    *background = false;
     char * arg=strtok(command,"|");
 
     while(arg != NULL && argc < ARGMAX-1)
     {
         argv[argc]=arg;
-        if(strcmp(argv[argc],"&")==0)
-        {
-            --argc; //so that the & symbol is overwritten with next string
-            *background = true; //run in inBackground
-        }
-
         ++argc;
         arg=strtok(NULL,"|"); //because in repeat strtoks, null must be passed
     }
@@ -161,7 +153,7 @@ void child_end(int sig) {
     int i=0;
     bool found_pid=false;
 
-    while (i<100 && !found_pid){
+    while (i<100){
        if (v[i].full &&v[i].pid==pid)///if pid exists and if full
        {
            found_pid=true;
@@ -171,11 +163,10 @@ void child_end(int sig) {
     }//finds the position that has the name of the command
     if (found_pid){
         char buffer[BUFSIZE];
-        sprintf(buffer,"\n%s with pid %d exited normally\n",v[i].command,pid);
+        sprintf(buffer,"\n%s%s with pid %d exited normally\n",KRED,v[i].command,pid);
         v[i].full=false;
         write(1, buffer, strlen(buffer));
     }
-
 }
 
 bool unsetenvF(const size_t argc, char **argv) {
@@ -216,7 +207,7 @@ void catchCTRL_Z(int sig) {
         kill(childPID, SIGTTIN);
         kill(childPID, SIGTSTP);
      // addtoLL(head, nowProcess , childPID, 0);
-      //  fprintf(stderr,KMAG "[+] %d %s\n" RESET, childPID, nowProcess);
+      //fprintf(stderr,KMAG "[+] %d %s\n" RESET, childPID, nowProcess);
     }
     signal(SIGTSTP, catchCTRL_Z);
 }
@@ -268,8 +259,6 @@ void input1(char **pString, char *cwdstr, char *usernhoststring) {
     fflush(stdout); // clear out the stdout buffer just in case
 
     char *command;
-    size_t buf = 0;
-    //getline(&command, &buf, stdin);
     cwd(cwdstr,0);
     UsernHost_names(usernhoststring);
     char prompt[3*BUFSIZE];
@@ -390,7 +379,7 @@ void redirection_handler(char **argv ,int *outfile,bool *redirect_out, bool *red
 }
 
 
-char **split_command(char *command, char *DELIM)
+char **split_command(char *command, char *DELIM,bool * background)
 {
     size_t i=0;
     char **pString = malloc(BUFSIZE * sizeof(char*));
@@ -399,6 +388,12 @@ char **split_command(char *command, char *DELIM)
     while(arg != NULL)
     {
         pString[i]=arg;
+        if(strcmp(pString[i],"&")==0)
+        {
+            --i; //so that the & symbol is overwritten with next string
+            *background = true; //run in inBackground
+        }
+
         ++i;
         arg=strtok(NULL,DELIM); //because in repeat strtoks, null must be passed
     }
@@ -406,7 +401,7 @@ char **split_command(char *command, char *DELIM)
     return pString;
 }
 
-bool execution(size_t argp, char **argv_p, bool background) {
+bool execution(size_t argp, char **argv_p) {
 
     if (argv_p[0] == NULL) {
         return false;
@@ -415,6 +410,7 @@ bool execution(size_t argp, char **argv_p, bool background) {
     bool redirect_in = false, redirect_out = false;
     int infile = 0, outfile = 0, stdinCpy = 0, stdoutCpy = 0;
 
+    bool background=false;
     char **argv;
 
     int in=0;
@@ -427,7 +423,7 @@ bool execution(size_t argp, char **argv_p, bool background) {
         dup2(STDIN_FILENO,stdinCpy);
         dup2(STDOUT_FILENO,stdoutCpy);
 
-        argv=split_command(argv_p[i], " \t\r\n\a");
+        argv=split_command(argv_p[i], " \t\r\n\a",&background);
         pipe(fd);
         redirection_handler(argv, &outfile, &redirect_out,&redirect_in,&infile);
 
@@ -445,7 +441,7 @@ bool execution(size_t argp, char **argv_p, bool background) {
     dup2(stdinCpy,STDIN_FILENO);
     dup2(stdoutCpy,STDOUT_FILENO);
 
-    argv=split_command(argv_p[i], " \t\r\n\a");
+    argv=split_command(argv_p[i], " \t\r\n\a",&background);
     redirection_handler(argv, &outfile, &redirect_out,&redirect_in,&infile);
 
     quit= execute_command(argv,background,redirect_in,redirect_out,infile,outfile,in,STDOUT_FILENO);
