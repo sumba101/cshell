@@ -29,8 +29,6 @@ pwd.h
 -
 grp.h
 -
-time.h
--
 wait.h
 -
 fcntl.h
@@ -38,6 +36,8 @@ fcntl.h
 readline/readline.h
 -
 readline/history.h
+-
+signal.h
 -
 prototypes.h
 /home/spawnfire/OS/cShell/cshell/2018114002_assgn2/prototypes.h

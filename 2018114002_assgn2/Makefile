@@ -1,2 +1,2 @@
 cshell:
-	gcc cshell.c
+	gcc cshell.c -lreadline

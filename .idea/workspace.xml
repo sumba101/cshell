@@ -12,16 +12,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c34f90f-7013-494b-8d05-95f828e28e99" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/2018114002_assgn2/file.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2018114002_assgn2/sorted.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2018114002_assgn2/infile.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2018114002_assgn2/out.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/2018114002_assgn2/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2018114002_assgn2/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/2018114002_assgn2/a.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2018114002_assgn2/cshell.c" beforeDir="false" afterPath="$PROJECT_DIR$/2018114002_assgn2/cshell.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/lines.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/prototypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/2018114002_assgn2/prototypes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/sortedlines.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/file.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/jobs.h" beforeDir="false" afterPath="$PROJECT_DIR$/2018114002_assgn2/jobs.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/output.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/2018114002_assgn2/sorted.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/2018114002_CShell" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/2018114002_CShell" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/2018114002_CShell.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/file" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -118,7 +124,12 @@
       <workItem from="1567419242169" duration="4509000" />
       <workItem from="1567875005349" duration="6074000" />
       <workItem from="1567959943978" duration="10201000" />
-      <workItem from="1568095507150" duration="4314000" />
+      <workItem from="1568095507150" duration="10993000" />
+      <workItem from="1568392382529" duration="54000" />
+      <workItem from="1568536352205" duration="739000" />
+      <workItem from="1569308006272" duration="12749000" />
+      <workItem from="1569394117201" duration="6865000" />
+      <workItem from="1569493936816" duration="23753000" />
     </task>
     <servers />
   </component>
@@ -146,23 +157,43 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
-          <line>301</line>
-          <option name="timeStamp" value="3" />
+          <line>497</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
-          <line>386</line>
-          <option name="timeStamp" value="4" />
+          <line>514</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
-          <line>445</line>
-          <option name="timeStamp" value="7" />
+          <line>381</line>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
-          <line>316</line>
-          <option name="timeStamp" value="8" />
+          <line>262</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
+          <line>206</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
+          <line>207</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
+          <line>228</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/2018114002_assgn2/cshell.c</url>
+          <line>219</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

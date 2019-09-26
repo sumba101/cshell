@@ -1,3 +1,8 @@
+/*  Author:- sumanth balaji
+ *  IIIT Hyderabad
+ *
+ * */
+
 #include <stdio.h>
 #include <zconf.h>
 #include <string.h>
@@ -7,12 +12,11 @@
 #include <sys/stat.h>
 #include <pwd.h>
 #include <grp.h>
-#include <time.h>
 #include <wait.h>
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <signal.h>
 /*common macros and data*/
 // Defining colors for usage later
 #define KRED  "\x1B[31m"
@@ -22,6 +26,7 @@
 //defining a maximum number of arguments
 #define ARGMAX 10
 #define DEF "\x1B[0m" //colour reset
+
 
 char history[20][BUFSIZE];
 int hist_counter=0;
@@ -41,6 +46,7 @@ char new_home[1000];
 #include "pwd.h"
 #include "history.h"
 
+char nowProcess[20];
 pid_t Shellpid, childPID=-1;
 
 //a greeting string which is constant
@@ -54,21 +60,16 @@ const char greeting[BUFSIZE]= "\t\t\t\t          __\n"
 //an exiting line
 const char ending[BUFSIZE]="Exiting the C shell, Thank You.";
 
-typedef struct values{
-    bool full;
-    pid_t pid;
-    char command[100];
-}Values; //structure for storing info of all background processes
-Values v[100];
 
+bool unsetenvF(size_t argc,char **argv);
+bool setenvF(size_t argc,char **argv);
+bool overkill(size_t argc,char **argv);
+bool kjob(size_t argc,char **argv);
+bool fg(size_t argc,char **argv);
+bool bg(size_t argc,char **argv);
+bool job_display(size_t argc,char **argv);
 
-
-bool unsetenvF(const size_t argc,char **argv);
-bool setenvF(const size_t argc,char **argv);
-bool overkill(const size_t argc,char **argv);
-bool kjob(const size_t argc,char **argv);
-
-const char * builtin_C[]={"exit","cd","clear","pwd","echo","ls","history","pinfo","quit","setenv","unsetenv","overkill","kjob"};
+const char * builtin_C[]={"exit","cd","clear","pwd","echo","ls","history","pinfo","quit","setenv","unsetenv","overkill","kjob","fg","bg","jobs"};
 
 const bool (*builtin_F[])(const size_t ,char **)={
         (const bool (*)(const size_t ,char **)) &exiter,
@@ -83,11 +84,11 @@ const bool (*builtin_F[])(const size_t ,char **)={
         (const bool (*)(const size_t, char **)) &setenvF,
         (const bool (*)(const size_t, char **)) &unsetenvF,
         (const bool (*)(const size_t, char **)) &overkill,
-        (const bool (*)(const size_t, char **)) &kjob};
+        (const bool (*)(const size_t, char **)) &kjob,
+        (const bool (*)(const size_t, char **)) &fg,
+        (const bool (*)(const size_t, char **)) &bg,
+        (const bool (*)(const size_t, char **)) &job_display};
 //setup for function call back mechanism
-
-
-bool HandlePipe(char **pString, char **pString1);
 
 
 void catchCTRL_Z(int sig);
@@ -102,19 +103,20 @@ int main(){    //semincolon separated commands in the command line due to assign
     bool exit=false;
 
     while(!exit){
-        signal(SIGTSTP,catchCTRL_Z);
-        signal(SIGINT,catchCTRL_C);
         childPID=-1;
 
-        //prompt();
+        signal(SIGTSTP,catchCTRL_Z);
+        signal(SIGINT,catchCTRL_C);
+
         char **commands=malloc(sizeof(char)*BUFSIZE);
         input1(commands,cwdstr,usernhoststring); //taking all the commands given
         for (int i = 0; commands[i] && !exit; ++i) {
             size_t argp=0;
             char **argv_p = malloc(sizeof(char)*BUFSIZE);
             argp=input2(argp,argv_p,commands[i]);
-            exit=execution(argp,argv_p);
 
+            exit=execution(argp,argv_p);
+            update_jobs();
             //exit takes value true in case of errors and whatnot
         }
         free(commands[0]);
@@ -122,9 +124,9 @@ int main(){    //semincolon separated commands in the command line due to assign
     }
 
     printf("%s%s",KBLU,ending);
+    erase_jobs(); ///clears up the list of all jobs
     return 0;
 }
-
 
 size_t input2(size_t argc, char **argv, char *command) {
 
@@ -150,22 +152,13 @@ void child_end(int sig) {
     pid_t pid;
     int status;
     pid = waitpid(-1, &status, WNOHANG); //wait till child process is over
-    int i=0;
-    bool found_pid=false;
+    Jobs* p=findJob(pid);
 
-    while (i<100){
-       if (v[i].full &&v[i].pid==pid)///if pid exists and if full
-       {
-           found_pid=true;
-           break;
-       }
-       ++i;
-    }//finds the position that has the name of the command
-    if (found_pid){
+    if (p){
         char buffer[BUFSIZE];
-        sprintf(buffer,"\n%s%s with pid %d exited normally\n",KRED,v[i].command,pid);
-        v[i].full=false;
+        sprintf(buffer,"\n%s%s with pid %d exited normally\n",KRED,p->name,pid);
         write(1, buffer, strlen(buffer));
+        remove_j(pid);
     }
 }
 
@@ -181,12 +174,17 @@ bool unsetenvF(const size_t argc, char **argv) {
 }
 
 bool setenvF(const size_t argc, char **argv) {
+
     if(argc == 3){ //given var and value
+        char temp[100];
+        strcpy(temp,argv[2]);
+
         if(setenv(argv[1],argv[2],1)==-1){
             perror("Setenv has failed");
         }
     }
     else if(argc == 2){ //given only var
+
         if(setenv(argv[1],"",1) == -1){
             perror("Setenv has failed");
         }
@@ -198,42 +196,59 @@ bool setenvF(const size_t argc, char **argv) {
 }
 
 void catchCTRL_Z(int sig) {
-    if(getpid() != Shellpid)
-        return;
-    //CTRL Z caught
+//    if(getpid() != Shellpid)
+//        return;
+    //CTRL Z caught3
     printf("\n");
+
+    char buffer[BUFSIZE];
+
     if(childPID != -1)
     {
-        kill(childPID, SIGTTIN);
+        //kill(childPID, SIGTTIN);
+
+        sprintf(buffer,"\nHERE1 %d\n",childPID);
+        write(1, buffer, strlen(buffer));
+
         kill(childPID, SIGTSTP);
-     // addtoLL(head, nowProcess , childPID, 0);
-      //fprintf(stderr,KMAG "[+] %d %s\n" RESET, childPID, nowProcess);
+
+
+        sprintf(buffer,"\nHERE2 %d\n",childPID);
+        write(1, buffer, strlen(buffer));
+
+        push(nowProcess, childPID, false);
+        childPID=-1;
+        strcpy(nowProcess,"");
+
+
+        sprintf(buffer,"\nHERE3 %d\n",childPID);
+        write(1, buffer, strlen(buffer));
+
+        signal(SIGTSTP, SIG_IGN);
+
     }
-    signal(SIGTSTP, catchCTRL_Z);
+
+    sprintf(buffer,"\nHERE4 %d\n",childPID);
+    write(1, buffer, strlen(buffer));
+
 }
 
 void catchCTRL_C(int sig) {
     printf("\n");
-    if(getpid() != Shellpid)
-        return;
 
     if(childPID != -1)
     {
         kill(childPID, SIGINT);
+        strcpy(nowProcess,"");
+        childPID=-1;
+        signal(SIGINT, SIG_IGN);
+
     }
-    signal(SIGINT, catchCTRL_C);
 }
 
 bool overkill(const size_t argc, char **argv) {
-    //have to end all processes
-    Jobs temp;
-    while (!empty()){
-        temp=top();
-        pop();
-        kill(temp.pid,17);
-        kill(temp.pid,SIGINT);
-        printf("%s Killed %d - %s\n",KRED,temp.pid,temp.name);
-    }
+    ///have to end all processes
+    overkill_jobs();
     return false;
 }
 
@@ -241,17 +256,64 @@ bool kjob(const size_t argc, char **argv) {
     if(argc != 3){
         printf("%s Error, wrong number of parameters");
     } else{
-        int Jnum=atoi(argv[1]);
+        int Jnum=atoi(argv[1]); ///just converting the characters into integers
         int sig=atoi(argv[2]);
-        bool j=checkJob(Jnum);
+        Jobs* j=getJob(Jnum);
         if(j){
-            Jobs j=getJob(Jnum);
-            kill(j.pid,sig);
+
+            kill(j->pid,sig);
+            if (sig==9){ ///if process is supposed to be killed
+                remove_j(j->pid);
+            }
         }
         else{
-            printf("%sError, no such pid exists");
+            printf("%sError, no such job number exists");
         }
     }
+    return false;
+}
+
+bool fg(const size_t argc, char **argv) {
+    if(argc!=2){
+        printf("error");
+        return false;
+    }
+    else{
+        int jno=atoi(argv[1]);
+        Jobs *p=getJob(jno);
+        if (p){
+            int pid = p -> pid;
+            kill(pid, SIGCONT);
+            childPID = pid;
+            strcpy(nowProcess, p->name); ///for use in ctrl-Z
+            remove_j(pid);
+            waitpid(-1,NULL,WUNTRACED);
+            childPID=-1;
+            strcpy(nowProcess,"");
+        }
+    }
+    return false;
+}
+
+bool bg(size_t argc, char **argv) {
+    if(argc!=2){
+        printf("Error, incorrect number of arguments");
+    } else{
+        int jno = atoi(argv[1]);
+        Jobs* job_node = getJob(jno);
+        if(job_node)
+        {
+            int pid = job_node -> pid;
+            kill(pid, SIGTTIN);
+            kill(pid, SIGCONT);
+            change(pid,1);
+        }
+    }
+    return 0;
+}
+
+bool job_display(size_t argc, char **argv) {
+    print_jobs();
     return false;
 }
 
@@ -282,49 +344,41 @@ void input1(char **pString, char *cwdstr, char *usernhoststring) {
     pString[i]=NULL;
 }
 
-bool execute_command(char **argv, bool background, int redirect_in,int redirect_out,int infile,int outfile,int in,int out){
+bool execute_command(char **argv, bool background, int in,int out){
     size_t argc = 0;
     while(argv[argc]){
      ++argc;
+    } ///find argc for future purposes
+
+
+    if(in!=STDIN_FILENO){ //means the input is coming from pipe, which is pointed to by in
+        dup2(in,STDIN_FILENO); //this puts pipe values for stdin
+        close(in); //closing the writing end of the pipe
     }
 
-    if (in != STDIN_FILENO)
-    {
-        dup2 (in, STDIN_FILENO);
-        close (in);
-    }
-
-    if (out != STDOUT_FILENO)
-    {
-        dup2 (out, STDOUT_FILENO);
-        close (out);
+    if (out != STDOUT_FILENO){
+        dup2(out,STDOUT_FILENO); //put the values of stdout into the write end of pipe
+        close(out);
     }
 
     for (int j = 0;builtin_C[j]; ++j) {
 
         if (!strcmp(argv[0],builtin_C[j])){
 
-            if (redirect_in){
-                dup2(infile,STDIN_FILENO);
-            }
-            if (redirect_out){
-                dup2(outfile,STDOUT_FILENO);
-            }
             bool ret= (builtin_F[j])(argc,argv);
-            return ret;
+
+            return ret; //exits the module if appropriate builtin command is executed
         }
     }
     //if it reaches here, the command is not a builtin command
     pid_t pid;
-    if ((pid=fork())<0){ perror("Error in forking\n");}
+    pid=fork();
+
+    if (pid<0){ perror("Error in forking\n");}
     else if(pid==0){///in child
 
-        if (redirect_in){
-            dup2(infile,STDIN_FILENO);
-        }
-        if (redirect_out){
-            dup2(outfile,STDOUT_FILENO);
-        }
+        if(background)
+            setpgid(0,0);
 
         if (execvp(argv[0],argv)<0){
             printf("Error: execution of command failed\n");
@@ -332,50 +386,73 @@ bool execute_command(char **argv, bool background, int redirect_in,int redirect_
         }
     } else{
         if (!background){ ///if it is not a background process, its run and finished
-            waitpid(pid,NULL,0);
-        } else{
 
-            for (int i = 0; i < 100 ; ++i) {
-                if(!v[i].full){
-                    v[i].full=true;
-                    v[i].pid=pid;
-                    strcpy(v[i].command,argv[0]);
-                    i=100; ///to break out of loop
+            char proc_name[100];
+            strcpy(proc_name,argv[0]);
+            for (int i = 1; argv[i]; ++i) {
+                strcat(proc_name," ");
+                strcat(proc_name,argv[i]);
+            }
+            strcpy(nowProcess,proc_name);
+            childPID=pid;
+            waitpid(pid,NULL,WUNTRACED);
+
+            strcpy(nowProcess,"");
+            childPID=-1;
+
+        } else{ ///if background process, store in jobs queue
+                tcsetpgrp(0, getpgrp());
+
+                char proc_name[100];
+                strcpy(proc_name,argv[0]);
+                for (int i = 1; argv[i]; ++i) {
+                    strcat(proc_name," ");
+                    strcat(proc_name,argv[i]);
                 }
-            }//above loop stores the command name and pid
-            signal(SIGCHLD,child_end);
+                push(proc_name,pid,true);
+                signal(SIGCHLD,child_end);
         }
     }
     return false; //default return
 }
 
 
-void redirection_handler(char **argv ,int *outfile,bool *redirect_out, bool *redirect_in,int *infile){
+void redirection_handler(char **argv ){
     //loop through to check for redirects and piping, i.e > < >> and |
+
+    int outfile=0;bool redirect_out = 0; bool redirect_in = 0;int infile=0;
+
     for (int i = 0; argv[i]; ++i) {
         if (!strcmp(argv[i], ">")) {
-            (*outfile) = open(argv[i + 1],  O_WRONLY | O_TRUNC | O_CREAT, 0644);
+            outfile = open(argv[i + 1],  O_WRONLY | O_TRUNC | O_CREAT, 0644);
             argv[i] = NULL;
-            (*redirect_out) = true;
+            redirect_out = true;
 
         } //redirect out
     }
     for (int i = 0; argv[i]; ++i) {
         if (!strcmp(argv[i], ">>")) {
-            (*outfile) = open(argv[i + 1],  O_WRONLY | O_APPEND | O_CREAT, 0644);
+            outfile = open(argv[i + 1],  O_WRONLY | O_APPEND | O_CREAT, 0644);
             argv[i] = NULL;
-            (*redirect_out) = true;
+            redirect_out = true;
 
         } //redirect out
     }
     for (int i = 0; argv[i]; ++i) {
         if (!strcmp(argv[i], "<")) {
-            (*infile) = open(argv[i + 1], O_RDONLY);
+            infile = open(argv[i + 1], O_RDONLY);
             argv[i] = NULL;
-            (*redirect_in) = true;
+            redirect_in = true;
         } //redirect in
     }
-
+    if (redirect_in){
+        dup2(infile,STDIN_FILENO);
+        close(infile);
+    }
+    if (redirect_out){
+        dup2(outfile,STDOUT_FILENO);
+        close(outfile);
+    }
 }
 
 
@@ -405,10 +482,7 @@ bool execution(size_t argp, char **argv_p) {
 
     if (argv_p[0] == NULL) {
         return false;
-    }//base case
-
-    bool redirect_in = false, redirect_out = false;
-    int infile = 0, outfile = 0, stdinCpy = 0, stdoutCpy = 0;
+    }//base case when its empty
 
     bool background=false;
     char **argv;
@@ -417,37 +491,44 @@ bool execution(size_t argp, char **argv_p) {
     int fd[2];
 
     size_t i=0;
-
     bool quit;
+
     for (; i < argp-1; ++i) {
-        dup2(STDIN_FILENO,stdinCpy);
-        dup2(STDOUT_FILENO,stdoutCpy);
+        background = false;
+
+        int stdinCpy=dup(STDIN_FILENO);
+        int stdoutCpy=dup(STDOUT_FILENO);
 
         argv=split_command(argv_p[i], " \t\r\n\a",&background);
-        pipe(fd);
-        redirection_handler(argv, &outfile, &redirect_out,&redirect_in,&infile);
 
-        quit= execute_command(argv,background,redirect_in,redirect_out,infile,outfile,in,fd[1]);
+        pipe(fd);
+
+        redirection_handler(argv);
+
+        quit= execute_command(argv,background,in,fd[1]);
         close(fd[1]);
 
-        dup2(stdinCpy,STDIN_FILENO);
         dup2(stdoutCpy,STDOUT_FILENO);
+        dup2(stdinCpy,STDIN_FILENO);
+
         in=fd[0];
-        if (quit){
+        if (quit){ /// quit command is present in the command
             return true;
         }
     }
 
-    dup2(stdinCpy,STDIN_FILENO);
-    dup2(stdoutCpy,STDOUT_FILENO);
+
+    int stdinCpy=dup(STDIN_FILENO);
+    int stdoutCpy=dup(STDOUT_FILENO);
 
     argv=split_command(argv_p[i], " \t\r\n\a",&background);
-    redirection_handler(argv, &outfile, &redirect_out,&redirect_in,&infile);
+    redirection_handler(argv);
 
-    quit= execute_command(argv,background,redirect_in,redirect_out,infile,outfile,in,STDOUT_FILENO);
+    quit= execute_command(argv,background,in,STDOUT_FILENO);
 
-    dup2(stdinCpy,STDIN_FILENO);
     dup2(stdoutCpy,STDOUT_FILENO);
+    dup2(stdinCpy,STDIN_FILENO);
+
     return quit;
 }
 
