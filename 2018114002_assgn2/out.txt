@@ -1,3 +1,0 @@
-[31m<spawnfire@spawnfire-pc:~>cat < infile.txt | sort > out.txt ^C
-^C
-[K[K

@@ -1,1 +1,3 @@
-The main code for execution of the cshell is present in cshell.c. All other files act as header files with purposes same as the name assigned to it.
+The main code for execution of the cshell is present in cshell.c.
+All other files act as header files with purposes same as the name assigned to it.
+This shell can handle all functionalities that can be found in the pdf's Assignment 2 and 3 that are attached to it.

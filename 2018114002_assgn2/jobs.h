@@ -53,9 +53,9 @@ void proc_status(char pid[],char status[]){
 //        case 'I':
 //            strcpy(status,"Idle");
 //            break;
-//        case 'X':
-//            strcpy(status,"Dead");
-//            break;
+        case 'X':
+            strcpy(status,"Dead");
+            break;
 //        case 'Z':
 //            strcpy(status,"Zombie");
 //            break;
@@ -267,3 +267,33 @@ void overkill_jobs(){
     erase_jobs(); ///clearing the background jobs list
 }
 
+
+bool overkill(const size_t argc, char **argv) {
+    ///have to end all processes
+    overkill_jobs();
+    return false;
+}
+
+bool kjob(const size_t argc, char **argv) {
+    if(argc != 3){
+        printf("%s Error, wrong number of parameters",KRED);
+    } else{
+        int Jnum=atoi(argv[1]); ///just converting the characters into integers
+        int sig=atoi(argv[2]);
+
+        Jobs* j=getJob(Jnum);
+        if(j){
+
+            kill(j->pid,sig);
+        }
+        else{
+            printf("%sError, no such job number exists",KRED);
+        }
+    }
+    return false;
+}
+
+bool job_display(size_t argc, char **argv) {
+    print_jobs();
+    return false;
+}

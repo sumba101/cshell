@@ -6,6 +6,17 @@ bool pwd(size_t argc,char **argv);
 bool echo(size_t argc,char **argv);
 bool ls(size_t argc,char **argv);
 bool historyp(size_t argc,char **argv);
+bool unsetenvF(size_t argc,char **argv);
+bool setenvF(size_t argc,char **argv);
+bool overkill(size_t argc,char **argv);
+bool kjob(size_t argc,char **argv);
+bool fg(size_t argc,char **argv);
+bool bg(size_t argc,char **argv);
+bool job_display(size_t argc,char **argv);
+void catchCTRL_Z(int sig);
+void catchCTRL_C(int sig);
+
+
 
 void cwd(char* cwdstr, int command);
 //helper function

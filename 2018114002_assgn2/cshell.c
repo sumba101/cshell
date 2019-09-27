@@ -24,7 +24,7 @@
 //defining a default buffer for inputs
 #define BUFSIZE 10000
 //defining a maximum number of arguments
-#define ARGMAX 10
+#define ARGMAX 20
 #define DEF "\x1B[0m" //colour reset
 
 
@@ -45,9 +45,10 @@ char new_home[1000];
 #include "pinfo.h"
 #include "pwd.h"
 #include "history.h"
+#include "environ.h"
 
 char nowProcess[20];
-pid_t Shellpid, childPID=-1;
+pid_t childPID=-1;
 
 //a greeting string which is constant
 const char greeting[BUFSIZE]= "\t\t\t\t          __\n"
@@ -60,16 +61,9 @@ const char greeting[BUFSIZE]= "\t\t\t\t          __\n"
 //an exiting line
 const char ending[BUFSIZE]="Exiting the C shell, Thank You.";
 
+bool cronjob(size_t argc,char **argv);
 
-bool unsetenvF(size_t argc,char **argv);
-bool setenvF(size_t argc,char **argv);
-bool overkill(size_t argc,char **argv);
-bool kjob(size_t argc,char **argv);
-bool fg(size_t argc,char **argv);
-bool bg(size_t argc,char **argv);
-bool job_display(size_t argc,char **argv);
-
-const char * builtin_C[]={"exit","cd","clear","pwd","echo","ls","history","pinfo","quit","setenv","unsetenv","overkill","kjob","fg","bg","jobs"};
+const char * builtin_C[]={"exit","cd","clear","pwd","echo","ls","history","pinfo","quit","setenv","unsetenv","overkill","kjob","fg","bg","jobs","cronjob"};
 
 const bool (*builtin_F[])(const size_t ,char **)={
         (const bool (*)(const size_t ,char **)) &exiter,
@@ -87,13 +81,9 @@ const bool (*builtin_F[])(const size_t ,char **)={
         (const bool (*)(const size_t, char **)) &kjob,
         (const bool (*)(const size_t, char **)) &fg,
         (const bool (*)(const size_t, char **)) &bg,
-        (const bool (*)(const size_t, char **)) &job_display};
+        (const bool (*)(const size_t, char **)) &job_display,
+        (const bool (*)(const size_t, char **)) &cronjob};
 //setup for function call back mechanism
-
-
-void catchCTRL_Z(int sig);
-
-void catchCTRL_C(int sig);
 
 int main(){    //semincolon separated commands in the command line due to assignment requirement
     printf("%s%s",KBLU,greeting);
@@ -162,75 +152,19 @@ void child_end(int sig) {
     }
 }
 
-bool unsetenvF(const size_t argc, char **argv) {
-    if (argc == 2){
-        if(unsetenv(argv[1])==-1){
-            perror("Unsetenv has failed");
-        }
-    }else{
-        printf("%s Error, number of arguments is incorrect",KRED);
-    }
-    return false;
-}
-
-bool setenvF(const size_t argc, char **argv) {
-
-    if(argc == 3){ //given var and value
-        char temp[100];
-        strcpy(temp,argv[2]);
-
-        if(setenv(argv[1],argv[2],1)==-1){
-            perror("Setenv has failed");
-        }
-    }
-    else if(argc == 2){ //given only var
-
-        if(setenv(argv[1],"",1) == -1){
-            perror("Setenv has failed");
-        }
-    }
-    else{ //error in input
-        printf("%s Error, number of arguments is incorrect",KRED);
-    }
-    return false;
-}
-
 void catchCTRL_Z(int sig) {
-//    if(getpid() != Shellpid)
-//        return;
-    //CTRL Z caught3
     printf("\n");
-
-    char buffer[BUFSIZE];
 
     if(childPID != -1)
     {
-        //kill(childPID, SIGTTIN);
-
-        sprintf(buffer,"\nHERE1 %d\n",childPID);
-        write(1, buffer, strlen(buffer));
 
         kill(childPID, SIGTSTP);
-
-
-        sprintf(buffer,"\nHERE2 %d\n",childPID);
-        write(1, buffer, strlen(buffer));
-
         push(nowProcess, childPID, false);
         childPID=-1;
         strcpy(nowProcess,"");
-
-
-        sprintf(buffer,"\nHERE3 %d\n",childPID);
-        write(1, buffer, strlen(buffer));
-
         signal(SIGTSTP, SIG_IGN);
 
     }
-
-    sprintf(buffer,"\nHERE4 %d\n",childPID);
-    write(1, buffer, strlen(buffer));
-
 }
 
 void catchCTRL_C(int sig) {
@@ -244,33 +178,6 @@ void catchCTRL_C(int sig) {
         signal(SIGINT, SIG_IGN);
 
     }
-}
-
-bool overkill(const size_t argc, char **argv) {
-    ///have to end all processes
-    overkill_jobs();
-    return false;
-}
-
-bool kjob(const size_t argc, char **argv) {
-    if(argc != 3){
-        printf("%s Error, wrong number of parameters");
-    } else{
-        int Jnum=atoi(argv[1]); ///just converting the characters into integers
-        int sig=atoi(argv[2]);
-        Jobs* j=getJob(Jnum);
-        if(j){
-
-            kill(j->pid,sig);
-            if (sig==9){ ///if process is supposed to be killed
-                remove_j(j->pid);
-            }
-        }
-        else{
-            printf("%sError, no such job number exists");
-        }
-    }
-    return false;
 }
 
 bool fg(const size_t argc, char **argv) {
@@ -288,8 +195,8 @@ bool fg(const size_t argc, char **argv) {
             strcpy(nowProcess, p->name); ///for use in ctrl-Z
             remove_j(pid);
             waitpid(-1,NULL,WUNTRACED);
-            childPID=-1;
-            strcpy(nowProcess,"");
+            //childPID=-1;
+            //strcpy(nowProcess,"");
         }
     }
     return false;
@@ -310,11 +217,6 @@ bool bg(size_t argc, char **argv) {
         }
     }
     return 0;
-}
-
-bool job_display(size_t argc, char **argv) {
-    print_jobs();
-    return false;
 }
 
 void input1(char **pString, char *cwdstr, char *usernhoststring) {
@@ -401,6 +303,7 @@ bool execute_command(char **argv, bool background, int in,int out){
             childPID=-1;
 
         } else{ ///if background process, store in jobs queue
+                setpgid(pid,0);
                 tcsetpgrp(0, getpgrp());
 
                 char proc_name[100];
@@ -415,7 +318,6 @@ bool execute_command(char **argv, bool background, int in,int out){
     }
     return false; //default return
 }
-
 
 void redirection_handler(char **argv ){
     //loop through to check for redirects and piping, i.e > < >> and |
@@ -454,7 +356,6 @@ void redirection_handler(char **argv ){
         close(outfile);
     }
 }
-
 
 char **split_command(char *command, char *DELIM,bool * background)
 {
@@ -530,5 +431,41 @@ bool execution(size_t argp, char **argv_p) {
     dup2(stdinCpy,STDIN_FILENO);
 
     return quit;
+}
+
+
+bool cronjob(size_t argc, char **argv) {
+    int t=0,p=0;
+    int itr=0;
+    for (size_t i = 0; i < argc ; ++i) {
+        if(!strcmp(argv[i],"-c")){
+            i++;
+            while (strcmp(argv[i],"-t")!=0){
+                strcpy(argv[itr],argv[i]);
+                ++itr;
+                ++i;
+            }
+
+            ++i;
+            t= (int) (argv[i][0] - '0');
+            ++i;
+            ++i;
+            p= (int) (argv[i][0] - '0');
+
+        }
+    } ///loop to get the command and to get t and p data
+
+    argv[itr]=NULL;
+
+    int times=p/t;
+    pid_t pid=fork();
+    if(pid==0){
+
+        while(times--){
+            sleep(t);
+            execute_command(argv,false,STDIN_FILENO,STDOUT_FILENO);
+        }
+    }
+    return false;
 }
 
