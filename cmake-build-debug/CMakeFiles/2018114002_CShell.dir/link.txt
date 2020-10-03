@@ -1,1 +1,0 @@
-/usr/bin/cc -g   CMakeFiles/2018114002_CShell.dir/2018114002_assgn2/cshell.c.o  -o 2018114002_CShell -lreadline 

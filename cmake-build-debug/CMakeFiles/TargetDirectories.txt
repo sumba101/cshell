@@ -1,3 +1,0 @@
-/home/spawnfire/OS/cshell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/spawnfire/OS/cshell/cmake-build-debug/CMakeFiles/2018114002_CShell.dir
-/home/spawnfire/OS/cshell/cmake-build-debug/CMakeFiles/edit_cache.dir
